@@ -1,4 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {
+  ApiHideProperty,
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
 import { Document, ObjectId, Types } from 'mongoose';
@@ -12,6 +17,7 @@ export type ProductImageDocument = ProductImage & Document;
   timestamps: true,
 })
 export class ProductImage {
+  @ApiHideProperty()
   @Exclude()
   @Transform(({ value }) => value.toString())
   @Type(() => Types.ObjectId)
@@ -20,12 +26,16 @@ export class ProductImage {
   @IsOptional()
   @IsString()
   @Expose()
-  id: string;
+  id?: string;
 
+  /*
+   *title of image
+   */
+  @IsOptional()
   @IsString()
   @Expose()
   @Prop({})
-  title: string;
+  title?: string;
 
   @IsString()
   @Prop({
