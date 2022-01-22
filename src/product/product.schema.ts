@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import {
   Contains,
@@ -23,15 +24,20 @@ export type ProductDocument = Product & Document;
   timestamps: true,
 })
 export class Product {
+  @ApiHideProperty()
   @Exclude()
   @Transform(({ value }) => value.toString())
   @Type(() => Types.ObjectId)
-  _id: ObjectId;
+  _id?: ObjectId;
 
+  @IsOptional()
   @IsString()
   @Expose()
-  id: string;
+  id?: string;
 
+  /*
+   *title of product
+   */
   @Expose()
   @IsString()
   @MinLength(10)
@@ -41,7 +47,7 @@ export class Product {
   })
   title: string;
 
-  @IsArray({ always: true })
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductImage)
   @Prop({
@@ -51,6 +57,9 @@ export class Product {
   })
   images: ProductImage[];
 
+  @ApiProperty({
+    description: 'price of product',
+  })
   @IsInt()
   @Min(0)
   @Prop({
@@ -58,6 +67,9 @@ export class Product {
   })
   price: number;
 
+  @ApiProperty({
+    description: 'count of avaialble products in stock',
+  })
   @IsInt()
   @Min(0)
   @Prop({
