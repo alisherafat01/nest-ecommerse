@@ -1,0 +1,16 @@
+@host = http://localhost:3000
+
+### get list of products
+GET  {{host}}/products
+
+
+### create new product
+POST {{host}}/products
+Content-Type: application/json
+
+{
+    "title": "second product title",
+    "price":2000,
+    "count": 12,
+    "images":[{"title":"first image","path":"/to/image-address.jpeg"}]
+}

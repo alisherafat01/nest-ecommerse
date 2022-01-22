@@ -1,0 +1,25 @@
+@host = http://localhost:3000
+
+###
+POST  {{host}}/auth/signup
+content-type: application/json
+
+{
+  "name":"Ali",
+  "email":"ali@test.com",
+  "password":"123456"
+}
+
+###
+POST  {{host}}/auth/signin
+content-type: application/json
+
+{
+  "email":"ali@test.com",
+  "password":"123456"
+}
+
+### get whoami
+GET  {{host}}/auth/profile
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZTU0ZGU5NzNmNmNjZDg2ZjA3ODUzZSIsImlhdCI6MTY0MjQyMjkxMywiZXhwIjoxNjQyNDgyOTEzfQ.jX51Umk4z3gcO5fpmMvjButNtRnSXAFa4JlyB5OrWjE

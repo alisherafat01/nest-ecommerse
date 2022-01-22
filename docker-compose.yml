@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  # api:
+  #   build: .
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - MONGO_CONNECTION=mongodb://mongouser:mongopass@mongo_db:27017/ecom-nest?authSource=admin
+
+  #   volumes:
+  #     - .:/app  
+  #     - /app/node_modules/
+  #   command: ./docker-entrypoint.sh
+  mongo_db:
+    image: mongo:4.0-xenial
+    ports:
+      - "64100:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongouser
+      - MONGO_INITDB_ROOT_PASSWORD=mongopass
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
