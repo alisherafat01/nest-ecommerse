@@ -6,8 +6,10 @@ import {
   IsEmail,
   IsEmpty,
   IsIn,
+  IsInt,
   IsOptional,
   IsString,
+  Min,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -20,4 +22,22 @@ import { Product } from '../product.schema';
 // @Type(() => ProductImage)
 // images: ProductImage[];
 // }
-export class CreateProductDto extends Product {}
+// export class CreateProductDto extends Product {}
+export class CreateProductDto {
+  @IsString()
+  @MinLength(10)
+  title: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProductImage)
+  images: ProductImage[];
+
+  @IsInt()
+  @Min(0)
+  price: number;
+
+  @IsInt()
+  @Min(0)
+  count: number;
+}

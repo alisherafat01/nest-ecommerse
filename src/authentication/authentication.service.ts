@@ -24,8 +24,8 @@ export class AuthenticationService {
     }
 
     user = await this.usersService.create(signupDto);
-    const payload = this.getJwtPayload(user);
-    const access_token = this.jwtService.sign(payload);
+    
+    const access_token = this.getAccessToken(user);
 
     return { user, token: { access_token } };
   }
@@ -40,7 +40,7 @@ export class AuthenticationService {
       password,
       user.password,
     );
-    
+
     if (!isPasswordMatching) {
       throw new BadRequestException('Wrong credentials provided');
     }
@@ -52,5 +52,9 @@ export class AuthenticationService {
 
   private getJwtPayload(user: User) {
     return { id: user.id };
+  }
+
+  public getAccessToken(user: User) {
+    return this.jwtService.sign(this.getJwtPayload(user));
   }
 }

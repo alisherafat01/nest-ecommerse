@@ -14,3 +14,14 @@ Content-Type: application/json
     "count": 12,
     "images":[{"title":"first image","path":"/to/image-address.jpeg"}]
 }
+
+### update new product
+POST {{host}}/products
+Content-Type: application/json
+
+{
+    "title": "second product title",
+    "price":2000,
+    "count": 12,
+    "images":[{"title":"first image","path":"/to/image-address.jpeg"}]
+}

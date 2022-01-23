@@ -3,7 +3,12 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
   Post,
+  Put,
   Req,
   UseGuards,
   UseInterceptors,
@@ -22,11 +27,14 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiParam,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../authentication/jwt.guard';
+import ParamsMongoId from '../shared/utils/params-with-mongo-id';
 @ApiTags('products')
 @Controller('products')
 export class ProductController {
@@ -44,6 +52,23 @@ export class ProductController {
   @ApiBearerAuth()
   async createProduct(@Body() createProductDto: CreateProductDto) {
     const product = await this.productService.create(createProductDto);
+    return product;
+  }
+
+  @ApiParam({ name: 'id' })
+  @ApiBearerAuth()
+  @ApiOkResponse()
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse({ description: 'Forbidden.' })
+  @UseInterceptors(MongooseClassSerializerInterceptor(Product))
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
+  @Patch(':id')
+  async updateProduct(
+    @Param() { id }: ParamsMongoId,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    const product = await this.productService.update(id, updateProductDto);
     return product;
   }
 

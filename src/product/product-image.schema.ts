@@ -21,7 +21,7 @@ export class ProductImage {
   @Exclude()
   @Transform(({ value }) => value.toString())
   @Type(() => Types.ObjectId)
-  _id: ObjectId;
+  _id?: ObjectId;
 
   @IsOptional()
   @IsString()
