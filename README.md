@@ -42,6 +42,6 @@ $ npm run test:cov
 - [x] MongoDB
 - [x] Data Serializer for mongoose
 - [x] Nice solution for DTO reusing in update/create scenarios
-- [ ] Swagger Documentation
+- [x] Swagger Documentation
 - [ ] Graphql API for products
 - [ ] Microservice Architecture
