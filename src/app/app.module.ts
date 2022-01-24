@@ -2,13 +2,14 @@ import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { UsersModule } from './users/users.module';
-import { ProductModule } from './product/product.module';
+
 import cookieParser from 'cookie-parser';
+import { UsersModule } from '../users/users.module';
+import { AuthenticationModule } from '../authentication/authentication.module';
+import { ProductModule } from '../product/product.module';
+import { getInMemoryMongoUri } from '../storage/mongodb/mongo-memory';
 
 @Module({
   imports: [
@@ -18,10 +19,10 @@ import cookieParser from 'cookie-parser';
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
+      useFactory: async (config: ConfigService) => ({
         uri:
           config.get('NODE_ENV') === 'test'
-            ? config.get<string>('MONGO_TEST_CONNECTION')
+            ? await getInMemoryMongoUri()
             : config.get<string>('MONGO_CONNECTION'),
         //autoIndex: false,
       }),
@@ -53,3 +54,4 @@ export class AppModule {
     consumer.apply(cookieParser()).forRoutes('*');
   }
 }
+

@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from '../src/app.module';
 import { Connection } from 'mongoose';
-import { getConnectionToken } from '@nestjs/mongoose';
+import { getConnectionToken, MongooseModule } from '@nestjs/mongoose';
 import { SignupUserDto } from '../src/authentication/dto/signup-user.dto';
 import { UsersService } from '../src/users/users.service';
 import { SigninUserDto } from '../src/authentication/dto/signin-user-dto';
@@ -14,6 +13,8 @@ import { JwtAuthGuard } from '../src/authentication/jwt.guard';
 import { MockJwtAuthGuard } from './mocks/mock-auth-guard';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationService } from '../src/authentication/authentication.service';
+import { AppModule } from '../src/app/app.module';
+import { closeInMemoryMongoConnection } from '../src/storage/mongodb/mongo-memory';
 
 describe('Product /products (e2e)', () => {
   let app: INestApplication;
@@ -21,16 +22,15 @@ describe('Product /products (e2e)', () => {
   let authService: AuthenticationService;
   let userService: UsersService;
   let accessToken: string;
+  let connection: Connection;
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      // .overrideProvider(JwtAuthGuard)
-      // .useClass(MockJwtAuthGuard)
-      .compile();
+    }).compile();
 
     productService = moduleFixture.get<ProductService>(ProductService);
     userService = moduleFixture.get<UsersService>(UsersService);
+    connection = await moduleFixture.get(getConnectionToken());
     authService = moduleFixture.get<AuthenticationService>(
       AuthenticationService,
     );
@@ -38,6 +38,8 @@ describe('Product /products (e2e)', () => {
     await app.init();
   });
   afterAll(async () => {
+    await connection.close();
+    await closeInMemoryMongoConnection();
     await app.close();
   });
 

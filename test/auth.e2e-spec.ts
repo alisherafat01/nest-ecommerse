@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from './../src/app.module';
 import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { SignupUserDto } from '../src/authentication/dto/signup-user.dto';
 import { UsersService } from '../src/users/users.service';
 import { SigninUserDto } from '../src/authentication/dto/signin-user-dto';
+import { AppModule } from '../src/app/app.module';
+import { closeInMemoryMongoConnection } from '../src/storage/mongodb/mongo-memory';
 
 describe('Authentication (e2e)', () => {
   let app: INestApplication;
@@ -18,15 +19,17 @@ describe('Authentication (e2e)', () => {
     }).compile();
 
     usersService = moduleFixture.get<UsersService>(UsersService);
-    //connection = await moduleFixture.get(getConnectionToken());
+    connection = await moduleFixture.get(getConnectionToken());
     app = moduleFixture.createNestApplication();
     await app.init();
   });
   afterAll(async () => {
-    // await connection.close(/*force:*/ true); // <-- important
+    await connection.close();
+    await closeInMemoryMongoConnection();
     await app.close();
   });
 
+  beforeEach(async () => {});
   afterEach(async () => {
     // truncate data from DB...
     await usersService.removeAll();
