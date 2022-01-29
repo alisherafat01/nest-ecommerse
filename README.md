@@ -43,5 +43,4 @@ $ npm run test:cov
 - [x] Data Serializer for mongoose
 - [x] Nice solution for DTO reusing in update/create scenarios
 - [x] Swagger Documentation
-- [ ] Graphql API for products
-- [ ] Microservice Architecture
+- [x] Graphql API for orders
