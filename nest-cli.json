@@ -9,6 +9,13 @@
           "introspectComments": true,
           "dtoFileNameSuffix": [".dto.ts", ".entity.ts", ".schema.ts"]
         }
+      },
+      {
+        "name": "@nestjs/graphql",
+        "options": {
+          "typeFileNameSuffix": [".input.ts", ".args.ts"],
+          "introspectComments": true
+        }
       }
     ]
   }
