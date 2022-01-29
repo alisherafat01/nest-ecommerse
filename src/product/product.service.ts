@@ -12,6 +12,13 @@ export class ProductService {
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
   ) {}
 
+  async findById(id: string) {
+    const product = await this.productModel.findById(id);
+    if (!product) {
+      throw new NotFoundException('product not found');
+    }
+    return product;
+  }
   async create(createDto: CreateProductDto) {
     const newProduct = new this.productModel(createDto);
     return newProduct.save();
@@ -34,11 +41,11 @@ export class ProductService {
   }
 
   async delete(id: string) {
-    const model =  await this.productModel.findById(id);
-    if(!model){
+    const model = await this.productModel.findById(id);
+    if (!model) {
       throw new NotFoundException();
     }
-    return model.delete()
+    return model.delete();
   }
 
   async deleteAll() {

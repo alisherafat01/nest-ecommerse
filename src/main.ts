@@ -7,10 +7,12 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {});
-  app.use(helmet());
-  app.enableCors();
+
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('PORT') ?? 3000;
+
+  if (configService.get('NODE_ENV') === 'production') app.use(helmet());
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('E-Commerse API')

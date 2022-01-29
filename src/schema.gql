@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+}
+
+type ProductImage {
+  id: String!
+  title: String!
+  path: String!
+}
+
+type Product {
+  id: String!
+  title: String!
+  images: ProductImage!
+  price: Int!
+  count: Int!
+}
+
+type OrderItem {
+  id: String!
+  product_title: String!
+  product_price: Int!
+  amount: Int!
+  product: Product!
+}
+
+type Order {
+  id: String!
+  owner: User!
+  items: [OrderItem!]!
+  totalPrice: Int!
+  paymentStatus: OrderPaymentStatus!
+  status: OrderStatus!
+}
+
+enum OrderPaymentStatus {
+  Unknown
+  Pending
+  Verify
+  Cancell
+}
+
+enum OrderStatus {
+  Place
+  Cancell
+  Checkout
+}
+
+type Query {
+  orders: [Order!]!
+  order(id: Int!): Order!
+}
+
+type Mutation {
+  createOrder(payload: CreateOrderInput!): Order!
+  deleteOrder(id: String!): Order!
+}
+
+input CreateOrderInput {
+  ownerId: String!
+  items: [OrderItemInput!]!
+}
+
+input OrderItemInput {
+  amount: Int!
+  productId: String!
+}

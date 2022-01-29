@@ -1,3 +1,4 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
   ApiHideProperty,
@@ -10,6 +11,7 @@ import { Document, ObjectId, Types } from 'mongoose';
 
 export type ProductImageDocument = ProductImage & Document;
 
+@ObjectType()
 @Schema({
   toJSON: {
     getters: true,
@@ -23,6 +25,7 @@ export class ProductImage {
   @Type(() => Types.ObjectId)
   _id?: ObjectId;
 
+  @Field()
   @IsOptional()
   @IsString()
   @Expose()
@@ -31,12 +34,14 @@ export class ProductImage {
   /*
    *title of image
    */
+  @Field()
   @IsOptional()
   @IsString()
   @Expose()
   @Prop({})
   title?: string;
 
+  @Field()
   @IsString()
   @Prop({
     required: true,

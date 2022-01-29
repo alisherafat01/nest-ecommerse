@@ -1,0 +1,21 @@
+@host = http://localhost:3000/graphql
+
+###
+POST  {{host}}
+X-Request-Type: GraphQL
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZTU0ZGU5NzNmNmNjZDg2ZjA3ODUzZSIsImlhdCI6MTY0MzM5MDAxMiwiZXhwIjoxNjQzNDUwMDEyfQ.61hAd0NLoHhm29y0PZMu_dY9rGOPBNf_f4JdBw0yM3k
+
+mutation{
+  deleteOrder(id: "61f280f19696618d01debdf3"),{
+    id,
+    totalPrice,
+    items{
+      id 
+      product_title
+      product_price
+      amount
+    }
+  }
+}
+

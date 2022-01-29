@@ -1,3 +1,4 @@
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
@@ -17,6 +18,7 @@ import { ProductImage, ProductImageSchema } from './product-image.schema';
 
 export type ProductDocument = Product & Document;
 
+@ObjectType()
 @Schema({
   toJSON: {
     getters: true,
@@ -30,6 +32,7 @@ export class Product {
   @Type(() => Types.ObjectId)
   _id?: ObjectId;
 
+  @Field()
   @IsOptional()
   @IsString()
   @Expose()
@@ -38,6 +41,7 @@ export class Product {
   /*
    *title of product
    */
+  @Field()
   @Expose()
   @IsString()
   @MinLength(10)
@@ -47,6 +51,7 @@ export class Product {
   })
   title: string;
 
+  @Field((type) => ProductImage)
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductImage)
@@ -57,9 +62,7 @@ export class Product {
   })
   images: ProductImage[];
 
-  @ApiProperty({
-    description: 'price of product',
-  })
+  @Field((type) => Int)
   @IsInt()
   @Min(0)
   @Prop({
@@ -67,9 +70,7 @@ export class Product {
   })
   price: number;
 
-  @ApiProperty({
-    description: 'count of avaialble products in stock',
-  })
+  @Field((type) => Int)
   @IsInt()
   @Min(0)
   @Prop({

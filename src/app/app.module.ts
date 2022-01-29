@@ -10,6 +10,9 @@ import { UsersModule } from '../users/users.module';
 import { AuthenticationModule } from '../authentication/authentication.module';
 import { ProductModule } from '../product/product.module';
 import { getInMemoryMongoUri } from '../storage/mongodb/mongo-memory';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
+import { OrderModule } from '../order/order.module';
 
 @Module({
   imports: [
@@ -27,10 +30,17 @@ import { getInMemoryMongoUri } from '../storage/mongodb/mongo-memory';
         //autoIndex: false,
       }),
     }),
-    // add throttle based on api (REST,Graphql,Socket,...)
+
     UsersModule,
     AuthenticationModule,
     ProductModule,
+    OrderModule,
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      installSubscriptionHandlers: true,
+      debug: true,
+      // context: ({ req }) => ({ req }),
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -54,4 +64,3 @@ export class AppModule {
     consumer.apply(cookieParser()).forRoutes('*');
   }
 }
-

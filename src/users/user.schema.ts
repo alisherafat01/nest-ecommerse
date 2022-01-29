@@ -1,3 +1,4 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { Document, ObjectId, Types } from 'mongoose';
@@ -5,6 +6,7 @@ import { ExcludeProperty } from 'nestjs-mongoose-exclude';
 
 export type UserDocument = User & Document;
 
+@ObjectType()
 @Schema({
   toJSON: {
     getters: true,
@@ -20,16 +22,17 @@ export class User {
   // })
   _id: ObjectId;
 
-  @Expose()
+  @Field()
   id: string;
 
-  @Expose()
+  @Field()
   @Prop({
     required: true,
     unique: true,
   })
   name: string;
 
+  @Field()
   @Prop({
     required: true,
   })
@@ -41,6 +44,7 @@ export class User {
   })
   password: string;
 
+  // @Field()
   @Prop({
     default: Date.now,
   })
