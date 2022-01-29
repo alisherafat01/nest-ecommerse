@@ -27,5 +27,6 @@ async function bootstrap() {
   });
 
   await app.listen(PORT);
+  console.log('app is running on ' + (await app.getUrl()));
 }
 bootstrap();
